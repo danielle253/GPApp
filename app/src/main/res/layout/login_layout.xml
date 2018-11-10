@@ -87,8 +87,9 @@
             android:id="@+id/loginButton"
             android:layout_width="350px"
             android:layout_height="wrap_content"
-            android:text="Login"
             android:background="@drawable/button_bg"
+            android:onClick="loginClick"
+            android:text="Login"
             android:textSize="25sp" />
 
         <LinearLayout

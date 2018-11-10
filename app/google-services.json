@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "309083113714",
+    "firebase_url": "https://group-project-22afb.firebaseio.com",
+    "project_id": "group-project-22afb",
+    "storage_bucket": "group-project-22afb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309083113714:android:2ad6bedf30904829",
+        "android_client_info": {
+          "package_name": "com.example.domis.android_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "309083113714-qugmnrb5mg7tkoog3tstho4dsahcgj4t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.domis.android_app",
+            "certificate_hash": "2ff8cf276fd31640dd1e895694d8e8a0106c9b34"
+          }
+        },
+        {
+          "client_id": "309083113714-7du5hk0bafpcbf9a26tf67ro064mriku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAKQnMXsdJpd9ixyR567fIY_dMBy56NZA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "309083113714-7du5hk0bafpcbf9a26tf67ro064mriku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,17 @@
-package com.example.domis.android_app;
+package com.example.domis.android_app.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.domis.android_app.R;
+import com.example.domis.android_app.authentication.LoginActivity;
+import com.example.domis.android_app.authentication.RegisterActivity;
+import com.example.domis.android_app.model.Booking;
+import com.example.domis.android_app.model.Coordinate;
+import com.example.domis.android_app.repository.FirebaseRepository;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
                 startRegisterActivity();
             }
         });
+
+        /*new FirebaseRepository().booking(
+                new Booking(
+                        new Coordinate(123, 123), new Coordinate(123, 125), "userId"));
+        new FirebaseRepository().getBooking();*/
     }
 
     private void startLoginActivity() {

@@ -1,4 +1,4 @@
-package com.example.domis.android_app;
+package com.example.domis.android_app.activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
 
+import com.example.domis.android_app.R;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;

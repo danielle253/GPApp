@@ -2,4 +2,17 @@
     <string name="app_name">Android_App</string>
     <string name="title_activity_maps">Map</string>
     <string name="back"><![CDATA[< Back]]></string>
+    <string name="booking">Booking</string>
+    <string name="support">Support</string>
+    <string name="something_else">Something Else</string>
+    <string name="log_out">Log Out</string>
+    <string name="title_activity_booking">BookingActivity</string>
+    <string name="city">City</string>
+    <string name="address_2">Address 2</string>
+    <string name="country">Country</string>
+    <string name="getgeolocation">GetGeolocation</string>
+    <string name="addres_1">Addres 1</string>
+    <string name="source">Source</string>
+    <string name="destination">Destination</string>
+    <string name="title_activity_auth">AuthActivity</string>
 </resources>
