@@ -12,6 +12,11 @@ import com.example.domis.android_app.R;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.Coordinate;
 import com.example.domis.android_app.repository.FirebaseRepository;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -20,41 +25,66 @@ import java.util.Locale;
 public class BookingActivity extends AppCompatActivity {
 
     FirebaseRepository rep;
+    private SupportPlaceAutocompleteFragment pafSrc;
+    private SupportPlaceAutocompleteFragment pafDest;
+    private LatLng src;
+    private LatLng dest;
+    private Booking booking;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
 
+        booking = new Booking();
+        booking.setUserID(FirebaseAuth.getInstance().getUid());
+
         rep = new FirebaseRepository();
+
+        pafSrc = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_src);
+        pafSrc.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                //addMarker(place);
+                booking.setSource(place.getLatLng());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
+
+        pafDest = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_dest);
+        pafDest.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                //addMarker(place);
+                booking.setDestination(place.getLatLng());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
+
+
     }
 
     public void makeBooking(View v){
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
-            //VALIDATION HERE !!!!!!!!!!!!!!!!!!!!
-            String source = ((EditText) findViewById(R.id.editSource)).getText() + "";
-            String destination = ((EditText) findViewById(R.id.editDestination)).getText() + "";
 
-            List<Address> source_addresses = geocoder.getFromLocationName(source, 1);
-            List<Address> destination_addresses = geocoder.getFromLocationName(destination, 1);
+            //Booking booking = new Booking(src, dest, FirebaseAuth.getInstance().getUid());
+            if(!(booking.getSource() == null || booking.getDestination() == null))
+            {
+                rep.booking(booking);
+            }
 
-            Address source_address = source_addresses.get(0);
-            Address destination_address = destination_addresses.get(0);
-
-            Coordinate source_cord = new Coordinate(
-                    source_address.getLatitude(),
-                    source_address.getLongitude());
-
-            Coordinate destination_cord = new Coordinate(
-                    destination_address.getLatitude(),
-                    destination_address.getLongitude());
-
-            Booking booking = new Booking(source_cord, destination_cord, FirebaseAuth.getInstance().getUid());
-
-            rep.booking(booking);
 
         } catch (Throwable e){}
 
     }
+
 }

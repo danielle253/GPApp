@@ -10,7 +10,7 @@
     <string name="city">City</string>
     <string name="address_2">Address 2</string>
     <string name="country">Country</string>
-    <string name="getgeolocation">GetGeolocation</string>
+    <string name="getgeolocation">Make Booking</string>
     <string name="addres_1">Addres 1</string>
     <string name="source">Source</string>
     <string name="destination">Destination</string>

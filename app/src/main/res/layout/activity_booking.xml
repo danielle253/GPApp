@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.BookingActivity">
 
-    <EditText
-        android:id="@+id/editSource"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.104"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/buttonBooking"
         android:layout_width="wrap_content"
@@ -33,40 +19,52 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <fragment
+        android:id="@+id/place_autocomplete_src"
+        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginBottom="107dp"
+        app:layout_constraintBottom_toTopOf="@+id/textDestinatio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textSouce"
         android:layout_width="80dp"
-        android:layout_height="28dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="14dp"
         android:text="@string/source"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/editSource"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/place_autocomplete_src"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textDestinatio"
         android:layout_width="118dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="12dp"
-        android:text="@string/destination"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/editDestination"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editDestination"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.014"
+        android:layout_marginBottom="40dp"
+        android:text="@string/destination"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/place_autocomplete_dest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editSource" />
+        app:layout_constraintTop_toBottomOf="@+id/place_autocomplete_src" />
+
+    <fragment
+        android:id="@+id/place_autocomplete_dest"
+        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="192dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDestinatio" />
 
 </android.support.constraint.ConstraintLayout>
