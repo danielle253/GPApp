@@ -6,12 +6,40 @@ public class User {
 
     private ArrayList<String> bookings;
     private double balance;
+    private String email;
+    private boolean active;
+    private String token;
 
     private User() {}
 
     public User(ArrayList<String> bookings, double balance) {
         this.bookings = bookings;
         this.balance = balance;
+
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public ArrayList<String> getBookings() {

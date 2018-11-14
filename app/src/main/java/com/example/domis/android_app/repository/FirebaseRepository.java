@@ -7,12 +7,17 @@ import android.util.Log;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,11 +32,10 @@ public class FirebaseRepository {
     }
 
     public void booking(final Booking booking) {
-        final String bookingKey = myRef.child("BOOKINGS").push().getKey();
         myRef.child("BOOKINGS").push().setValue(booking, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        UserDetails.currentUser.getBookings().add(bookingKey);
+                        UserDetails.currentUser.getBookings().add(databaseReference.getKey());
                         updateCurrentUserBookings();
                     }
                 }
@@ -40,7 +44,7 @@ public class FirebaseRepository {
     }
 
     public void getBooking() {
-        myRef.child("BOOKINGS").child("-LQxkKZYONj7ZyQcmSx1").addListenerForSingleValueEvent(new ValueEventListener() {
+        /*myRef.child("BOOKINGS").child("-LQxkKZYONj7ZyQcmSx1").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Booking booking = dataSnapshot.getValue(Booking.class);
@@ -51,30 +55,37 @@ public class FirebaseRepository {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
-    private void updateCurrentUserBookings(){
+    private void updateCurrentUserBookings() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("booking", UserDetails.currentUser.getBookings());
+        map.put("bookings", UserDetails.currentUser.getBookings());
         myRef.child("USERS").child(UserDetails.UID).updateChildren(map);
     }
 
-    public void getCurrentUserDetails(final String token) {
+    public void getCurrentUserDetails(final String reference) {
         final DatabaseReference users = myRef.child("USERS");
         users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user;
+                UserDetails.setCurrentUser(dataSnapshot.child(reference).getValue(User.class));
 
-                if (dataSnapshot.hasChild(token)) {
-                    user = dataSnapshot.child(token).getValue(User.class);
-                } else {
-                    user = new User(new ArrayList<String>(), 0.0);
-                    users.child(token).setValue(user);
-                }
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                if (task.isSuccessful()) {
+                                    User user = UserDetails.currentUser;
+                                    user.setToken(task.getResult().getToken());
 
-                UserDetails.setCurrentUser(user);
+                                    Map<String, Object> map = new HashMap<String, Object>();
+                                    map.put(reference, user);
+
+                                    users.updateChildren(map);
+                                }
+                            }
+                        });
             }
 
             @Override

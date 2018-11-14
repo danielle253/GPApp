@@ -103,18 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success
                             Log.d("", "signInWithEmail:success");
-
-                            mAuth.getCurrentUser().getIdToken(true)
-                                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                                        if(task.isSuccessful()){
-                                            Log.d("BOOIIIIII: ",task.getResult().getToken());
-                                        }
-                                    }
-                            });
-
-                            //rep.getCurrentUserDetails();
+                            rep.getCurrentUserDetails(mAuth.getCurrentUser().getUid());
                             successLogin();
                         } else {
                             // If sign in fails, display a message to the user.

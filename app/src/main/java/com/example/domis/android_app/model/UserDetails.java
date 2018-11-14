@@ -10,8 +10,14 @@ public class UserDetails {
     public static String UID;
 
     public static void setCurrentUser(User user){
-        if(user.getBookings() == null) user.setBookings(new ArrayList<String>());
-        currentUser = user;
+        if(user == null)
+            currentUser = new User(new ArrayList<String>(), 0.0);
+        else {
+            if (user.getBookings() == null)
+                user.setBookings(new ArrayList<String>());
+
+            currentUser = user;
+        }
 
         UID = FirebaseAuth.getInstance().getUid();
     }
