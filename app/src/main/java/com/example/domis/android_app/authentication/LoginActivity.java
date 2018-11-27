@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.domis.android_app.activity.BookingActivity;
 import com.example.domis.android_app.R;
+import com.example.domis.android_app.activity.MapsActivity;
 import com.example.domis.android_app.model.UserDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -122,6 +123,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startMapActivity() {
-        startActivity(new Intent(this, BookingActivity.class));
+        startActivity(new Intent(this, MapsActivity.class));
     }
 }

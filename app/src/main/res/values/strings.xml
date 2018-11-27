@@ -15,4 +15,7 @@
     <string name="source">Source</string>
     <string name="destination">Destination</string>
     <string name="title_activity_auth">AuthActivity</string>
+    <string name="srcLabel">From:</string>
+    <string name="destLabel">To:</string>
+    <string name="bookingButton">Book Now</string>
 </resources>
