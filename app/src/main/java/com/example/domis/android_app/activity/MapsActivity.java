@@ -3,40 +3,28 @@ package com.example.domis.android_app.activity;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SearchView;
 
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.model.Booking;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,8 +40,6 @@ import com.google.maps.model.Unit;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -146,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         totalDuration /= 60;
                         float cost = 3 + (totalDist * 1.33333f);
                         Log.e("Dist: ", totalDist + "");
-                        Log.e("Dur: ", ((int)totalDuration / 60) + ":" + (totalDuration % 60));
+                        Log.e("Dur: ", ((int)totalDuration / 60) + "h " + ((int)totalDuration % 60) + "min");
                         Log.e("Cost: ", "€" + cost);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -158,24 +144,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
-    }
-
-    private float calculateDuration(DirectionsResult directions) {
-        float total = 0;
-        for(int i = 0; i < directions.routes[0].legs.length; i++)
-        {
-            total += directions.routes[0].legs[i].duration.inSeconds;
-        }
-        return total;
-    }
-
-    private float calculateDistance(DirectionsResult directions) {
-        float total = 0;
-        for(int i = 0; i < directions.routes[0].legs.length; i++)
-        {
-            total += directions.routes[0].legs[i].distance.inMeters;
-        }
-        return total;
     }
 
     /**
@@ -229,6 +197,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private float calculateDuration(DirectionsResult directions) {
+        float total = 0;
+        for(int i = 0; i < directions.routes[0].legs.length; i++)
+        {
+            total += directions.routes[0].legs[i].duration.inSeconds;
+        }
+        return total;
+    }
+
+    private float calculateDistance(DirectionsResult directions) {
+        float total = 0;
+        for(int i = 0; i < directions.routes[0].legs.length; i++)
+        {
+            total += directions.routes[0].legs[i].distance.inMeters;
+        }
+        return total;
+    }
 
     /**
      * Gets the current location of the device, and positions the map's camera.
