@@ -1,5 +1,8 @@
 package com.example.domis.android_app.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -11,9 +14,11 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.model.Booking;
+import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,6 +35,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.android.PolyUtil;
@@ -51,6 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Booking booking;
     private Marker srcMarker;
     private Marker destMarker;
+    private TextView incorrectCountryLabel;
     private boolean srcExists;
     private boolean destExists;
 
@@ -64,8 +71,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastKnownLocation;
 
     private GeoApiContext geoContext;
+    private FirebaseRepository rep;
 
     private Button bookButton;
+    private Button menuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,25 +83,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        booking = new Booking();
+        booking.setUserID(FirebaseAuth.getInstance().getUid());
+
+        rep = new FirebaseRepository();
+
         srcExists = false;
         destExists = false;
 
         geoContext = getGeoContext();
 
         bookButton = findViewById(R.id.bookButton);
+        menuButton = findViewById(R.id.menuButton);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (!mLocationPermissionGranted)
             getLocationPermission();
 
+        incorrectCountryLabel = findViewById(R.id.incorrectCountryLabel);
+
         pafSrc = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_src);
         pafSrc.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 if (place != null) {
-                    src = place.getLatLng();
-                    setSourceMarker(src, place.getName().toString());
+                    if(place.getAddress().toString().endsWith("Ireland"))
+                    {
+                        Log.e("Andress: ", place.getAddress().toString());
+                        src = place.getLatLng();
+                        incorrectCountryLabel.setText("");
+                        setSourceMarker(src, place.getName().toString());
+                    }
+                    else
+                    {
+                        Log.e("Andress: ", place.getAddress().toString());
+                        incorrectCountryLabel.setText("Please choose a location in Ireland");
+                    }
                 }
             }
 
@@ -107,8 +134,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onPlaceSelected(Place place) {
                 if (place != null) {
-                    dest = place.getLatLng();
-                    setDestMarker(place);
+                    if(place.getAddress().toString().endsWith("Ireland"))
+                    {
+                        Log.e("Andress: ", place.getAddress().toString());
+                        dest = place.getLatLng();
+                        incorrectCountryLabel.setText("");
+                        setDestMarker(place);
+                    }
+                    else
+                    {
+                        Log.e("Andress: ", place.getAddress().toString());
+                        incorrectCountryLabel.setText("Please choose a location in Ireland");
+                    }
                 }
             }
 
@@ -124,6 +161,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(src != null && dest != null)
                 {
                     try {
+                        booking.setSource(src);
+                        booking.setDestination(dest);
                         DirectionsResult directions = getDirections();
                         addPolyline(directions);
                         float totalDist = calculateDistance(directions);
@@ -134,6 +173,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Log.e("Dist: ", totalDist + "");
                         Log.e("Dur: ", ((int)totalDuration / 60) + "h " + ((int)totalDuration % 60) + "min");
                         Log.e("Cost: ", "€" + cost);
+                        Thread.sleep(1000);
+                        final AlertDialog ad = new AlertDialog.Builder(MapsActivity.this).create();
+                        ad.setMessage("Distance: " + totalDist + "km\n" +
+                        "Duration: " + ((int)totalDuration / 60) + "h " + ((int)totalDuration % 60) + "min\n" +
+                        "Cost: €" + cost + "\n" +
+                        "Do you require wheelchair access?");
+                        ad.setButton(DialogInterface.BUTTON_POSITIVE, "Yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        booking.setWheelchair(true);
+                                        rep.booking(booking);
+                                    }
+                                });
+                        ad.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        booking.setWheelchair(false);
+                                        rep.booking(booking);
+                                    }
+                                });
+                        ad.setButton(DialogInterface.BUTTON_NEUTRAL, "Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ad.cancel();
+                                    }
+                                });
+                        ad.show();
+                        incorrectCountryLabel.setText("");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ApiException e) {
@@ -142,8 +212,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         e.printStackTrace();
                     }
                 }
+                else
+                {
+                    incorrectCountryLabel.setText("INCORRECT SOURCE/DESTINATION");
+                }
             }
         });
+
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                incorrectCountryLabel.setText("");
+                startMenuActivity();
+            }
+        });
+    }
+
+    private void startMenuActivity() {
+        startActivity(new Intent(this, MenuActivity.class));
     }
 
     /**
