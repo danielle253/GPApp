@@ -15,6 +15,7 @@ public class MenuActivity extends AppCompatActivity {
     private Button bookingsButton;
     private Button suppButton;
     private Button logoutButton;
+    private Button mapButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +25,21 @@ public class MenuActivity extends AppCompatActivity {
         bookingsButton = findViewById(R.id.bookingButton);
         suppButton = findViewById(R.id.suppButton);
         logoutButton = findViewById(R.id.logoutButton);
+        mapButton = findViewById(R.id.mapButton);
 
         suppButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 startActivity(new Intent(MenuActivity.this, SupportActivity.class));
+            }
+        });
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MenuActivity.this, MapsActivity.class));
             }
         });
 
