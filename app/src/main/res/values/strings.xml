@@ -4,7 +4,7 @@
     <string name="back"><![CDATA[< Back]]></string>
     <string name="booking">Booking</string>
     <string name="support">Support</string>
-    <string name="something_else">Something Else</string>
+    <string name="map">Map</string>
     <string name="log_out">Log Out</string>
     <string name="title_activity_booking">BookingActivity</string>
     <string name="city">City</string>

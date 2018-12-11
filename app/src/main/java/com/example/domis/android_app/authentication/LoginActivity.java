@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.domis.android_app.activity.BookingActivity;
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.activity.MapsActivity;
+import com.example.domis.android_app.activity.MenuActivity;
 import com.example.domis.android_app.model.UserDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startMapActivity();
+                        startMenuActivity();
                     }
                 });
         ad.show();
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void startMapActivity() {
-        startActivity(new Intent(this, MapsActivity.class));
+    private void startMenuActivity() {
+        startActivity(new Intent(this, MenuActivity.class));
     }
 }
