@@ -29,26 +29,31 @@
 
         <Button
             android:id="@+id/mapButton"
-            android:layout_width="match_parent"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:text="@string/map" />
+            android:text="@string/map"
+            android:drawableLeft="@drawable/map_icon"
+            android:gravity="center"/>
 
         <Button
             android:id="@+id/bookingButton"
-            android:layout_width="match_parent"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:text="@string/booking" />
+            android:text="@string/booking"
+            android:drawableLeft="@drawable/booking_icon"
+            android:gravity="center"/>
 
         <Button
             android:id="@+id/suppButton"
-            android:layout_width="match_parent"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:text="@string/support"
-            android:drawableLeft="@drawable/chat_icon"/>
+            android:drawableLeft="@drawable/chat_icon"
+            android:gravity="center"
+            android:text="@string/support" />
 
         <Button
             android:id="@+id/logoutButton"
-            android:layout_width="match_parent"
+            android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/holo_red_dark"
             android:text="@string/log_out"
