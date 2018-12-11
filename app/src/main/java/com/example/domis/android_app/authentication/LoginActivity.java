@@ -27,7 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
 public class LoginActivity extends AppCompatActivity {
-    //private FirebaseController firebaseController;
+
     private FirebaseAuth mAuth;
     private FirebaseRepository rep;
 
@@ -67,15 +67,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void successLogin() {
-        AlertDialog ad = new AlertDialog.Builder(this).create();
+        final AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setMessage("Login Successful");
         ad.setButton(DialogInterface.BUTTON_POSITIVE, "Continue",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         startMenuActivity();
+                        ad.cancel();
                     }
                 });
+        ad.setCancelable(false);
         ad.show();
     }
 
