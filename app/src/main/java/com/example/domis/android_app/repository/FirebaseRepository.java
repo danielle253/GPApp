@@ -60,9 +60,9 @@ public class FirebaseRepository {
         Log.e("Done", "Booking");
     }
 
-    public Booking getBooking(String bookingID)
+    public Object getBooking(String bookingID)
     {
-        Booking b = getObject(BOOKING_LOG_REF, bookingID);
+        Object b = getObject(BOOKING_LOG_REF, bookingID);
         if(b == null)
         {
             b = getObject(BOOKING_REF, bookingID);

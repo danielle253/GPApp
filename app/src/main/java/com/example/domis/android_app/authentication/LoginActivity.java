@@ -85,17 +85,6 @@ public class LoginActivity extends AppCompatActivity {
     public void login(String email, String password) {
         Log.d("", "signIn:" + email);
 
-
-        //UserDetails.setCurrentUser(rep.getUser(mAuth.getCurrentUser().getUid()));
-        //successLogin();
-
-        /*
-        if (!validateForm()) {
-            return;
-        }
-        */
-
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

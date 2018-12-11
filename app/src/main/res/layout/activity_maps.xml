@@ -70,38 +70,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:context=".activity.MapsActivity" />
 
-            <TextView
-                android:id="@+id/incorrectCountryLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/map"
-                android:layout_alignBottom="@+id/map"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="false"
-                android:layout_centerHorizontal="false"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginBottom="81dp"
-                android:gravity="center_horizontal"
-                android:textAllCaps="true"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteY="493dp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/menuButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Button" />
 
                 <Button
                     android:id="@+id/bookButton"

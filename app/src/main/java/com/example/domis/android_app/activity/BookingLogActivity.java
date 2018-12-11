@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.domis.android_app.R;
+import com.example.domis.android_app.model.Booking;
+import com.example.domis.android_app.model.ConfirmedBooking;
 import com.example.domis.android_app.model.UserDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
 
@@ -19,7 +21,10 @@ public class BookingLogActivity extends AppCompatActivity {
 
     private Button historyButton;
     private ListView listView;
-    private List<String> bookingList;
+    private ListView listView2;
+    private List<ConfirmedBooking> confirmedBookings;
+    private List<String> inprogressList;
+    private List<String> completedList;
     private FirebaseRepository rep;
 
     @Override
@@ -29,6 +34,7 @@ public class BookingLogActivity extends AppCompatActivity {
 
         historyButton = findViewById(R.id.historyButton);
         listView = findViewById(R.id.listView);
+        listView2 = findViewById(R.id.listView2);
 
         rep = new FirebaseRepository();
 
@@ -38,17 +44,42 @@ public class BookingLogActivity extends AppCompatActivity {
                 Log.e("Button ", "clicked");
                 List<String> bookings = UserDetails.currentUser.getBookings();
                 Log.e("Bookings: ", bookings.toString());
-                bookingList = new ArrayList<>();
+                confirmedBookings = new ArrayList<>();
                 for(String b : bookings)
                 {
-                    bookingList.add(rep.getBooking(b).toString());
-                    Log.e("Booking ", rep.getBooking(b).toString());
+                    Object obj = rep.getBooking(b);
+                    Log.e("Booking ", obj.toString());
+                    if(obj instanceof ConfirmedBooking)
+                    {
+                        confirmedBookings.add((ConfirmedBooking) obj);
+                    }
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                inprogressList = new ArrayList<>();
+                completedList = new ArrayList<>();
+                for(ConfirmedBooking cb : confirmedBookings)
+                {
+                    if(cb.getState().equals("COMPLETED"))
+                    {
+                        completedList.add("From: " + cb.getSourceAddress()
+                                + "\nTo: " + cb.getDestinationAddress()
+                                + "\nDuration: " + cb.getDuration());
+                    }
+                    else
+                    {
+                        inprogressList.add("From: " + cb.getSourceAddress()
+                                + "\nTo: " + cb.getDestinationAddress());
+                    }
+                }
+                ArrayAdapter<String> completedArray = new ArrayAdapter<String>(
                         BookingLogActivity.this,
                         android.R.layout.simple_list_item_1,
-                        bookingList );
-                listView.setAdapter(arrayAdapter);
+                        completedList );
+                ArrayAdapter<String> inprogressArray = new ArrayAdapter<String>(
+                        BookingLogActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        completedList );
+                listView.setAdapter(inprogressArray);
+                listView.setAdapter(completedArray);
             }
         });
     }

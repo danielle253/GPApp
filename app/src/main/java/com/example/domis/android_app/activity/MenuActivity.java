@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.authentication.LoginActivity;
 import com.example.domis.android_app.model.UserDetails;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class MenuActivity extends AppCompatActivity {
@@ -21,11 +22,14 @@ public class MenuActivity extends AppCompatActivity {
     private Button suppButton;
     private Button logoutButton;
     private Button mapButton;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        mAuth = FirebaseAuth.getInstance();
 
         userView = findViewById(R.id.userLogin);
         userView.setText("User: " + UserDetails.currentUser.getEmail());
@@ -62,8 +66,8 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                FirebaseAuth.getInstance().signOut();
                 finish();
-                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
             }
         });
 

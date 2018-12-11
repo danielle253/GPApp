@@ -1,8 +1,10 @@
 package com.example.domis.android_app.activity;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -37,6 +39,15 @@ public class SupportActivity extends AppCompatActivity {
         ticketLabel = findViewById(R.id.newTicketLabel);
         ticketQuery = findViewById(R.id.ticketText);
 
+        Display display = getWindowManager().getDefaultDisplay();
+
+        //Getting the screen resolution into point object
+        Point size = new Point();
+        display.getSize(size);
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = size.y / 2;
+        listView.setLayoutParams(params);
 
 
 
