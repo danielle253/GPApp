@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.domis.android_app.R;
+import com.example.domis.android_app.authentication.LoginActivity;
 
 
 public class MenuActivity extends AppCompatActivity {
@@ -57,7 +58,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 finish();
-                startActivity(new Intent(MenuActivity.this, MainActivity.class));
+                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
             }
         });
 
