@@ -63,7 +63,7 @@
         <activity android:name=".authentication.RegisterActivity" />
         <activity android:name=".activity.MenuActivity" />
         <activity android:name=".activity.BookingActivity" />
-        <activity android:name=".SupportActivity"></activity>
+        <activity android:name=".activity.SupportActivity"></activity>
     </application>
 
 </manifest>
