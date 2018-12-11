@@ -2,6 +2,7 @@ package com.example.domis.android_app.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,16 +32,18 @@ public class BookingLogActivity extends AppCompatActivity {
 
         rep = new FirebaseRepository();
 
-        ArrayList<String> bookings = UserDetails.currentUser.getBookings();
-        bookingList = new ArrayList<>();
-        for(String b : bookings)
-        {
-            bookingList.add(rep.getBooking(b).toString());
-        }
-
         historyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("Button ", "clicked");
+                List<String> bookings = UserDetails.currentUser.getBookings();
+                Log.e("Bookings: ", bookings.toString());
+                bookingList = new ArrayList<>();
+                for(String b : bookings)
+                {
+                    bookingList.add(rep.getBooking(b).toString());
+                    Log.e("Booking ", rep.getBooking(b).toString());
+                }
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         BookingLogActivity.this,
                         android.R.layout.simple_list_item_1,

@@ -7,18 +7,13 @@ import android.util.Log;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.common.collect.ImmutableMap;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +25,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 import com.example.domis.android_app.model.Entity;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class FirebaseRepository {
 
@@ -117,7 +110,6 @@ public class FirebaseRepository {
 
                                 Map<String, Object> map = new HashMap<String, Object>();
                                 map.put(reference, user);
-                                Log.e("User bookings: ", UserDetails.currentUser.getBookings().toString());
                                 users.updateChildren(map);
                             }
                         });
@@ -165,16 +157,18 @@ public class FirebaseRepository {
 
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                Log.e("", snapshot.child(reference).child(child).toString());
                 if(snapshot.getValue() != null) {
                     waiter.setObject(snapshot.getValue(CLASS_REF.get(reference)));
                     ((T) waiter.getObject()).setKey(snapshot.getKey());
+                    Log.e("Waiter: ", waiter.object.toString());
                 }
                 waiter.respond();
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                System.out.println("Failed To Get " + child);
+                Log.e("Failed To Get ", child);
                 waiter.respond();
             }
 

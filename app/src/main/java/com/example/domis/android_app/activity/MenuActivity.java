@@ -28,12 +28,19 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         userView = findViewById(R.id.userLogin);
-        userView.setText("User: "+ UserDetails.currentUser);
+        userView.setText("User: " + UserDetails.currentUser.getEmail());
 
         bookingsButton = findViewById(R.id.bookingButton);
         suppButton = findViewById(R.id.suppButton);
         logoutButton = findViewById(R.id.logoutButton);
         mapButton = findViewById(R.id.mapButton);
+
+        bookingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, BookingLogActivity.class));
+            }
+        });
 
         suppButton.setOnClickListener(new View.OnClickListener() {
             @Override
