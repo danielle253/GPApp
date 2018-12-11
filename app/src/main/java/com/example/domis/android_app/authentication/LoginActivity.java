@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void startMenuActivity() {
         Intent in = new Intent(this, MenuActivity.class);
-        in.putExtra("emailInsert", emailInput.toString());
+        in.putExtra("emailInsert", emailInput.getText());
         startActivity(in);
     }
 }
