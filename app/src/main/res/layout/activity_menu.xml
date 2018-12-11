@@ -43,7 +43,8 @@
             android:id="@+id/suppButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/support" />
+            android:text="@string/support"
+            android:drawableLeft="@android:drawable/chatIcon"/>
 
         <Button
             android:id="@+id/logoutButton"
