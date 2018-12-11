@@ -15,7 +15,6 @@ public class MenuActivity extends AppCompatActivity {
     private Button bookingsButton;
     private Button suppButton;
     private Button logoutButton;
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,6 @@ public class MenuActivity extends AppCompatActivity {
         bookingsButton = findViewById(R.id.bookingButton);
         suppButton = findViewById(R.id.suppButton);
         logoutButton = findViewById(R.id.logoutButton);
-        listView = findViewById(R.id.listView);
 
         suppButton.setOnClickListener(new View.OnClickListener() {
             @Override
