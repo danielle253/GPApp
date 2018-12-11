@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
-public class Booking {
+public class Booking extends Entity {
 
     private LatLng source;
     private LatLng destination;

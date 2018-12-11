@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.domis.android_app.R;
+import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
 
@@ -25,7 +26,6 @@ public class SupportActivity extends AppCompatActivity {
     private ListView listView;
     private TextView ticketLabel;
     private EditText ticketQuery;
-    private List<String> bookingList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +37,7 @@ public class SupportActivity extends AppCompatActivity {
         ticketLabel = findViewById(R.id.newTicketLabel);
         ticketQuery = findViewById(R.id.ticketText);
 
-        bookingList = UserDetails.currentUser.getBookings();
 
-        historyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                        SupportActivity.this,
-                        android.R.layout.simple_list_item_1,
-                        bookingList );
-                listView.setAdapter(arrayAdapter);
-            }
-        });
 
 
     }

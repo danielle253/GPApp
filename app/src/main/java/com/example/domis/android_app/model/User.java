@@ -2,7 +2,7 @@ package com.example.domis.android_app.model;
 
 import java.util.ArrayList;
 
-public class User {
+public class User extends Entity {
 
     private ArrayList<String> bookings;
     private double balance;

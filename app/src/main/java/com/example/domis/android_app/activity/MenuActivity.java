@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.authentication.LoginActivity;
+import com.example.domis.android_app.model.UserDetails;
 
 
 public class MenuActivity extends AppCompatActivity {
@@ -26,11 +27,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        Intent in = getIntent();
-        emailIn = in.getStringExtra("emailInsert");
-
         userView = findViewById(R.id.userLogin);
-        userView.setText("User: "+emailIn);
+        userView.setText("User: "+ UserDetails.currentUser);
 
         bookingsButton = findViewById(R.id.bookingButton);
         suppButton = findViewById(R.id.suppButton);

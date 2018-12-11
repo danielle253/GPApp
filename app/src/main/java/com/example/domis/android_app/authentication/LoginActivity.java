@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        Log.e("User: ", currentUser.toString());
 
         if (currentUser != null) {
             rep.getCurrentUserDetails(currentUser.getUid());
@@ -70,14 +71,11 @@ public class LoginActivity extends AppCompatActivity {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setMessage("Login Successful");
         ad.setButton(DialogInterface.BUTTON_POSITIVE, "Continue",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startMenuActivity();
-                        ad.cancel();
-                    }
+                (dialog, which) -> {
+                    startMenuActivity();
+                    ad.cancel();
                 });
-        ad.setCancelable(false);
+        //ad.setCancelable(false);
         ad.show();
     }
 
@@ -85,20 +83,22 @@ public class LoginActivity extends AppCompatActivity {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setMessage("Login Failed");
         ad.setButton(DialogInterface.BUTTON_POSITIVE, "Continue",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ad.cancel();
-                    }
-                });
+                (dialog, which) -> ad.cancel());
     }
 
     public void login(String email, String password) {
         Log.d("", "signIn:" + email);
 
+
+        //UserDetails.setCurrentUser(rep.getUser(mAuth.getCurrentUser().getUid()));
+        //successLogin();
+
+        /*
         if (!validateForm()) {
             return;
         }
+        */
+
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success
                             Log.d("", "signInWithEmail:success");
-                            rep.getCurrentUserDetails(mAuth.getCurrentUser().getUid());
+                            UserDetails.setCurrentUser(rep.getUser(mAuth.getCurrentUser().getUid()));
                             successLogin();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -119,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+
     }
 
     public boolean validateForm() {
@@ -126,8 +127,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startMenuActivity() {
-        Intent in = new Intent(this, MenuActivity.class);
-        in.putExtra("emailInsert", emailInput.getText());
-        startActivity(in);
+        startActivity(new Intent(LoginActivity.this, MenuActivity.class));
     }
 }
