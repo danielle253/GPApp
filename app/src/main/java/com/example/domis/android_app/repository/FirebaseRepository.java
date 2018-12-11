@@ -23,6 +23,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.Entity;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+
 public class FirebaseRepository {
 
     private DatabaseReference myRef;
@@ -56,6 +60,34 @@ public class FirebaseRepository {
 
             }
         });*/
+
+        public <T extends Entity> List<T> getObjectList(String reference, Class<T> c) {
+            final Waiter waiter = new Waiter();
+
+            ref.child(reference).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+
+                    snapshot.getChildren().forEach(i -> {
+                        T item = i.getValue(c);
+                        item.setKey(i.getKey());
+                        waiter.getList().add(item);
+                    });
+                    waiter.respond();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    System.out.println("Query is Cancelled");
+                }
+
+            });
+
+            waiter.waitRespond();
+
+            return waiter.getList();
+        }
     }
 
     private void updateCurrentUserBookings() {
