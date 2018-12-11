@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.domis.android_app.R;
 
 
 public class MenuActivity extends AppCompatActivity {
 
+    private String emailIn;
+    private TextView userView;
     private Button bookingsButton;
     private Button suppButton;
     private Button logoutButton;
@@ -21,6 +24,12 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        Intent in = getIntent();
+        emailIn = in.getStringExtra("emailInsert");
+
+        userView = findViewById(R.id.userLogin);
+        userView.setText("User: "+emailIn);
 
         bookingsButton = findViewById(R.id.bookingButton);
         suppButton = findViewById(R.id.suppButton);

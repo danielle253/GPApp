@@ -6,11 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".activity.MenuActivity">
 
+    <TextView
+        android:id="@+id/userLogin"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="442dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/mapButton"
@@ -22,7 +36,7 @@
             android:id="@+id/bookingButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/booking"/>
+            android:text="@string/booking" />
 
         <Button
             android:id="@+id/suppButton"
@@ -37,6 +51,7 @@
             android:backgroundTint="@android:color/holo_red_dark"
             android:text="@string/log_out"
             android:textColor="@android:color/white" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
