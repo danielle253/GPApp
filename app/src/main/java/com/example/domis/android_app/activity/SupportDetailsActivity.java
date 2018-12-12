@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.model.Message;
 import com.example.domis.android_app.model.SupportTicket;
+import com.example.domis.android_app.model.TicketDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
 
 import java.util.ArrayList;
@@ -32,8 +33,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
         title = findViewById(R.id.title);
         list = findViewById(R.id.list);
 
-        Intent in = getIntent();
-        ticket = rep.getSupportTicket(in.getStringExtra("id"));
+        ticket = TicketDetails.currentTicket;
         title.setText(ticket.getTitle());
 
         List<String> messages = new ArrayList<>();

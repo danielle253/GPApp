@@ -17,6 +17,7 @@ import com.example.domis.android_app.activity.MapsActivity;
 import com.example.domis.android_app.repository.FirebaseController;
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.model.User;
+import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -35,10 +36,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Button registerButton;
 
+    private FirebaseRepository rep;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
+
+        rep = new FirebaseRepository();
 
         userEmailIn = findViewById(R.id.editEmail);
         userPass1In = findViewById(R.id.editPass1);
@@ -95,6 +100,12 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d("", "createUserWithEmail:success");
                             Toast.makeText(RegisterActivity.this, "Authentication Succes.",
                                     Toast.LENGTH_SHORT).show();
+                            mAuth.getCurrentUser().getEmail();
+                            mAuth.getCurrentUser().getUid();
+                            User user = new User(new ArrayList<>(), 0);
+                            user.setEmail(mAuth.getCurrentUser().getEmail());
+                            user.setToken(mAuth.getCurrentUser().getUid());
+                            rep.addUser(user);
                             successRegister();
                             //FirebaseUser user = mAuth.getCurrentUser();
                         } else {
