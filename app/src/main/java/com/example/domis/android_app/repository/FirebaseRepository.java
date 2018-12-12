@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.domis.android_app.model.Booking;
+import com.example.domis.android_app.model.Message;
 import com.example.domis.android_app.model.SupportTicket;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
@@ -52,11 +53,27 @@ public class FirebaseRepository {
     }
 
     public void booking(final Booking booking) {
-        myRef.child("BOOKINGS").push().setValue(booking, new DatabaseReference.CompletionListener() {
+        myRef.child(BOOKING_REF).push().setValue(booking, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                         UserDetails.currentUser.getBookings().add(databaseReference.getKey());
                         updateCurrentUserBookings();
+                    }
+                }
+        );
+        Log.e("Done", "Booking");
+    }
+
+
+    public void createSupportTicket(String message) {
+        List<Message> messages = new ArrayList<>();
+        messages.add(new Message(UserDetails.UID, message));
+        SupportTicket ticket = new SupportTicket(messages, message);
+        myRef.child(SUPPORT_TICKET_REF).push().setValue(ticket, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        UserDetails.currentUser.getSupportTickets().add(databaseReference.getKey());
+                        updateCurrentUserTickets();
                     }
                 }
         );
@@ -97,9 +114,30 @@ public class FirebaseRepository {
         return usersBookings;
     }
 
+    /**
+    private void updateCurrentUser()
+    {
+        List<Map<String, Object>> children = new ArrayList<>();
+        Map<String, Object> bookingMap = new HashMap<String, Object>();
+        bookingMap.put("bookings", UserDetails.currentUser.getBookings());
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("tickets", UserDetails.currentUser.getSupportTickets());
+        children.add(bookingMap);
+        children.add(map);
+        myRef.child("USERS").child(UserDetails.UID).updateChildren(children);
+
+    }
+     */
+
     private void updateCurrentUserBookings() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bookings", UserDetails.currentUser.getBookings());
+        myRef.child("USERS").child(UserDetails.UID).updateChildren(map);
+    }
+
+    private void updateCurrentUserTickets() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("tickets", UserDetails.currentUser.getSupportTickets());
         myRef.child("USERS").child(UserDetails.UID).updateChildren(map);
     }
 

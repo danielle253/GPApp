@@ -6,7 +6,6 @@ import java.util.List;
 
 public class SupportTicket extends Entity {
 
-    private String id;
     private List<Message> messages;
     private String state;
     private String title;
@@ -16,20 +15,10 @@ public class SupportTicket extends Entity {
 
     }
 
-    public SupportTicket(String id, List<Message> messages, String state, String title)
+    public SupportTicket(List<Message> messages, String title)
     {
-        this.id = id;
         this.messages = messages;
-        this.state = state;
         this.title = title;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public List<Message> getMessages() {
@@ -54,5 +43,10 @@ public class SupportTicket extends Entity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void addMessage(Message message)
+    {
+        messages.add(message);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.domis.android_app.R;
+import com.example.domis.android_app.authentication.LoginActivity;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
@@ -31,6 +34,7 @@ public class SupportActivity extends AppCompatActivity {
     private ListView listView;
     private TextView ticketLabel;
     private EditText ticketQuery;
+    private Button sendButton;
     private FirebaseRepository rep;
     private List<String> ticketIDs;
 
@@ -45,6 +49,7 @@ public class SupportActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         ticketLabel = findViewById(R.id.newTicketLabel);
         ticketQuery = findViewById(R.id.ticketText);
+        sendButton = findViewById(R.id.sendButton);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -60,6 +65,7 @@ public class SupportActivity extends AppCompatActivity {
                 if(historyButton.getText().equals("HIDE"))
                 {
                     listView.setAdapter(null);
+                    historyButton.setText("SHOW");
                 }
                 else
                 {
@@ -74,6 +80,7 @@ public class SupportActivity extends AppCompatActivity {
                         android.R.layout.simple_list_item_1,
                         tickets );
                     listView.setAdapter(messageArray);
+                    historyButton.setText("HIDE");
                 }
 
             }
@@ -86,7 +93,22 @@ public class SupportActivity extends AppCompatActivity {
             }
         });
 
-
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = ticketQuery.getText().toString();
+                Log.e("Message: ", message);
+                if(message != null && !message.isEmpty())
+                {
+                    rep.createSupportTicket(message);
+                }
+                else
+                {
+                    Toast.makeText(SupportActivity.this, "Invalid message",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
     }
