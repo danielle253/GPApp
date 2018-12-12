@@ -64,7 +64,9 @@
         <activity android:name=".activity.MenuActivity" />
         <activity android:name=".activity.BookingActivity" />
         <activity android:name=".activity.SupportActivity" />
-        <activity android:name=".activity.BookingLogActivity"></activity>
+        <activity android:name=".activity.BookingLogActivity"/>
+        <activity android:name=".game.GameActivity" />
+        <activity android:name=".game.GameMainActivity" />
     </application>
 
 </manifest>
