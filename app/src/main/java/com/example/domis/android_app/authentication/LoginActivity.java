@@ -17,6 +17,7 @@ import com.example.domis.android_app.activity.BookingActivity;
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.activity.MapsActivity;
 import com.example.domis.android_app.activity.MenuActivity;
+import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailInput;
     private EditText passInput;
 
+    private Button loginButton;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,27 +47,21 @@ public class LoginActivity extends AppCompatActivity {
         passInput = findViewById(R.id.editPass);
 
         //Buttons
-        Button loginButton = findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.loginButton);
 
         mAuth = FirebaseAuth.getInstance();
         rep = new FirebaseRepository();
     }
 
     public void loginClick(View v){
+        Toast.makeText(LoginActivity.this, "Logging in...",
+            Toast.LENGTH_LONG).show();
         login(emailInput.getText() + "", passInput.getText() + "");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        Log.e("User: ", currentUser.toString());
-
-        if (currentUser != null) {
-            rep.getCurrentUserDetails(currentUser.getUid());
-            successLogin();
-        }
     }
 
     public void successLogin() {
@@ -75,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
                     startMenuActivity();
                     ad.cancel();
                 });
-        //ad.setCancelable(false);
         ad.show();
     }
 
@@ -89,25 +85,21 @@ public class LoginActivity extends AppCompatActivity {
     public void login(String email, String password) {
         Log.d("", "signIn:" + email);
 
-
-        //UserDetails.setCurrentUser(rep.getUser(mAuth.getCurrentUser().getUid()));
-        //successLogin();
-
-        /*
-        if (!validateForm()) {
-            return;
-        }
-        */
-
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success
-                            Log.d("", "signInWithEmail:success");
-                            UserDetails.setCurrentUser(rep.getUser(mAuth.getCurrentUser().getUid()));
+                            Log.d(mAuth.getCurrentUser().getUid(), "signInWithEmail:success");
+                            User user = rep.getUser(mAuth.getCurrentUser().getUid());
+                            Log.e("USER: ", user.toString());
+                            UserDetails.setCurrentUser(user);
+                            //Log.e("USER TOKEN: ", UserDetails.currentUser.getToken());
+                            Log.e("USER ACTIVE: ", UserDetails.currentUser.isActive() + "");
+                            Log.e("USER BALANCE: ", UserDetails.currentUser.getBalance() + "");
+                            UserDetails.currentUser.setEmail(email);
+                            Log.e("User bookings: ", UserDetails.currentUser.getBookings().toString());
                             successLogin();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -119,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     public boolean validateForm() {

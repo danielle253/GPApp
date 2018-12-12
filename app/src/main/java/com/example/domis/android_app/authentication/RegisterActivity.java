@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void registerClick(View v) {
         if (valid())
-            registrate(userEmailIn.getText() + "", userPass1In.getText() + "");
+            register(userEmailIn.getText() + "", userPass1In.getText() + "");
     }
 
     //Validation Requires Here!!!
@@ -85,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    private void registrate(String email, String password) {
+    private void register(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -116,8 +116,8 @@ public class RegisterActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       // startMapActivity();
                         sendEmailVerification();
+                        finish();
                     }
                 });
 
@@ -135,9 +135,5 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
         ad.show();
-    }
-
-    private void startMapActivity() {
-        startActivity(new Intent(RegisterActivity.this, MapsActivity.class));
     }
 }

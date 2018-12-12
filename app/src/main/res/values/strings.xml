@@ -18,4 +18,8 @@
     <string name="srcLabel">From:</string>
     <string name="destLabel">To:</string>
     <string name="bookingButton">Book Now</string>
+    <string name="inProg">Bookings in progress</string>
+    <string name="completed">Completed bookings</string>
+    <string name="new_ticket">Create a new support ticket below</string>
+    <string name="send">Send</string>
 </resources>

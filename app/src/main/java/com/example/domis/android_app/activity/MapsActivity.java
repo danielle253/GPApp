@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.domis.android_app.R;
+import com.example.domis.android_app.authentication.LoginActivity;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.location.LocationServices;
@@ -57,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Booking booking;
     private Marker srcMarker;
     private Marker destMarker;
-    private TextView incorrectCountryLabel;
     private boolean srcExists;
     private boolean destExists;
 
@@ -74,7 +75,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseRepository rep;
 
     private Button bookButton;
-    private Button menuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +94,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         geoContext = getGeoContext();
 
         bookButton = findViewById(R.id.bookButton);
-        menuButton = findViewById(R.id.menuButton);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (!mLocationPermissionGranted)
             getLocationPermission();
-
-        incorrectCountryLabel = findViewById(R.id.incorrectCountryLabel);
 
         pafSrc = (SupportPlaceAutocompleteFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_src);
         pafSrc.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -110,15 +107,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (place != null) {
                     if(place.getAddress().toString().endsWith("Ireland"))
                     {
-                        Log.e("Andress: ", place.getAddress().toString());
+                        Log.e("Address: ", place.getAddress().toString());
                         src = place.getLatLng();
-                        incorrectCountryLabel.setText("");
                         setSourceMarker(src, place.getName().toString());
                     }
                     else
                     {
                         Log.e("Andress: ", place.getAddress().toString());
-                        incorrectCountryLabel.setText("Please choose a location in Ireland");
+                        Toast.makeText(MapsActivity.this, "Please choose a location in Ireland",
+                                Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -136,15 +133,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (place != null) {
                     if(place.getAddress().toString().endsWith("Ireland"))
                     {
-                        Log.e("Andress: ", place.getAddress().toString());
+                        Log.e("Address: ", place.getAddress().toString());
                         dest = place.getLatLng();
-                        incorrectCountryLabel.setText("");
                         setDestMarker(place);
                     }
                     else
                     {
-                        Log.e("Andress: ", place.getAddress().toString());
-                        incorrectCountryLabel.setText("Please choose a location in Ireland");
+                        Log.e("Address: ", place.getAddress().toString());
+                        Toast.makeText(MapsActivity.this, "Please choose a location in Ireland",
+                                Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -203,7 +200,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     }
                                 });
                         ad.show();
-                        incorrectCountryLabel.setText("");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ApiException e) {
@@ -214,16 +210,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 else
                 {
-                    incorrectCountryLabel.setText("INCORRECT SOURCE/DESTINATION");
+                    Toast.makeText(MapsActivity.this, "INCORRECT SOURCE/DESTINATION",
+                        Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                incorrectCountryLabel.setText("");
-                startMenuActivity();
             }
         });
     }
