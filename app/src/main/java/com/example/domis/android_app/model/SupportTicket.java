@@ -8,16 +8,20 @@ public class SupportTicket extends Entity {
 
     private String id;
     private List<Message> messages;
+    private String state;
+    private String title;
 
     public SupportTicket()
     {
 
     }
 
-    public SupportTicket(String id, List<Message> messages)
+    public SupportTicket(String id, List<Message> messages, String state, String title)
     {
         this.id = id;
         this.messages = messages;
+        this.state = state;
+        this.title = title;
     }
 
     public String getId() {
@@ -34,5 +38,21 @@ public class SupportTicket extends Entity {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

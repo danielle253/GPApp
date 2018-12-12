@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -45,8 +46,6 @@ public class SupportActivity extends AppCompatActivity {
         ticketQuery = findViewById(R.id.ticketText);
 
         Display display = getWindowManager().getDefaultDisplay();
-
-        //Getting the screen resolution into point object
         Point size = new Point();
         display.getSize(size);
 
@@ -54,10 +53,38 @@ public class SupportActivity extends AppCompatActivity {
         params.height = size.y / 2;
         listView.setLayoutParams(params);
 
-        ArrayAdapter<String> messageArray = new ArrayAdapter<String>(
-                SupportActivity.this,
-                android.R.layout.simple_list_item_1,
-                completedList );
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(historyButton.getText().equals("HIDE"))
+                {
+                    listView.setAdapter(null);
+                }
+                else
+                {
+                    List<String> ticketIDs = UserDetails.currentUser.getSupportTickets();
+                    List<String> tickets = new ArrayList<>();
+                    for(String s : ticketIDs)
+                    {
+                        tickets.add(rep.getSupportTicket(s).getTitle());
+                    }
+                    ArrayAdapter<String> messageArray = new ArrayAdapter<String>(
+                        SupportActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        tickets );
+                    listView.setAdapter(messageArray);
+                }
+
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
 
 
 

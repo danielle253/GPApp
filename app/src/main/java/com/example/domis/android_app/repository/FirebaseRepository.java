@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.domis.android_app.model.Booking;
+import com.example.domis.android_app.model.SupportTicket;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
 import com.google.common.collect.ImmutableMap;
@@ -34,7 +35,8 @@ public class FirebaseRepository {
             CARS_REF = "CARS",
             ADMIN_REF = "ADMIN_USERS",
             BOOKING_REF = "BOOKINGS",
-            BOOKING_LOG_REF = "BOOKINGS_LOG";
+            BOOKING_LOG_REF = "BOOKINGS_LOG",
+            SUPPORT_TICKET_REF = "SUPPORT_TICKETS";
 
     private final Map<String, Class> CLASS_REF = ImmutableMap.<String, Class>builder()
             .put(USERS_REF, User.class)
@@ -42,6 +44,7 @@ public class FirebaseRepository {
             //.put(ADMIN_REF, Admin.class)
             .put(BOOKING_REF, Booking.class)
             .put(BOOKING_LOG_REF, Booking.class)
+            .put(SUPPORT_TICKET_REF, SupportTicket.class)
             .build();
 
     public FirebaseRepository() {
@@ -73,6 +76,11 @@ public class FirebaseRepository {
     public User getUser(String userID)
     {
         return getObject(USERS_REF, userID);
+    }
+
+    public SupportTicket getSupportTicket(String id)
+    {
+        return getObject(SUPPORT_TICKET_REF, id);
     }
 
     public ArrayList<Booking> getUserBookings(String userID) {

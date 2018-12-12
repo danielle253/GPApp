@@ -20,4 +20,5 @@
     <string name="bookingButton">Book Now</string>
     <string name="inProg">Bookings in progress</string>
     <string name="completed">Completed bookings</string>
+    <string name="new_ticket">Create a new support ticket below</string>
 </resources>
