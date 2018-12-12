@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.authentication.LoginActivity;
+import com.example.domis.android_app.game.GameMainActivity;
 import com.example.domis.android_app.model.UserDetails;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -22,6 +23,7 @@ public class MenuActivity extends AppCompatActivity {
     private Button suppButton;
     private Button logoutButton;
     private Button mapButton;
+    private Button gameButton;
     private FirebaseAuth mAuth;
 
     @Override
@@ -38,12 +40,15 @@ public class MenuActivity extends AppCompatActivity {
         suppButton = findViewById(R.id.suppButton);
         logoutButton = findViewById(R.id.logoutButton);
         mapButton = findViewById(R.id.mapButton);
+        gameButton = findViewById(R.id.gameButton);
 
         bookingsButton.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, BookingLogActivity.class)));
 
         suppButton.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, SupportActivity.class)));
 
         mapButton.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, MapsActivity.class)));
+
+        gameButton.setOnClickListener(v -> startActivity(new Intent(MenuActivity.this, GameMainActivity.class)));
 
         logoutButton.setOnClickListener(v -> {
             Log.e("Signing out", "");
