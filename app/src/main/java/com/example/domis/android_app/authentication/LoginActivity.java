@@ -54,9 +54,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginClick(View v){
-        Toast.makeText(LoginActivity.this, "Logging in...",
-            Toast.LENGTH_LONG).show();
-        login(emailInput.getText() + "", passInput.getText() + "");
+        if(!emailInput.getText().toString().isEmpty() && !passInput.getText().toString().isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Logging in...",
+                    Toast.LENGTH_LONG).show();
+            login(emailInput.getText() + "", passInput.getText() + "");
+        }
     }
 
     @Override
@@ -64,26 +66,33 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    public void successLogin() {
+    public Object successLogin() {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setMessage("Login Successful");
         ad.setButton(DialogInterface.BUTTON_POSITIVE, "Continue",
                 (dialog, which) -> {
-                    startMenuActivity();
                     ad.cancel();
+                    startMenuActivity();
                 });
         ad.show();
+        return null;
     }
 
-    public void failedLogin() {
+    public Object failedLogin() {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setMessage("Login Failed");
         ad.setButton(DialogInterface.BUTTON_POSITIVE, "Continue",
                 (dialog, which) -> ad.cancel());
+        ad.show();
+        return null;
     }
+
 
     public void login(String email, String password) {
         Log.d("", "signIn:" + email);
+        //User user = rep.getObject(FirebaseRepository.USERS_REF, "D1B6KN45KRahDUvF5IzZIQ3YSFx2");
+        //emailInput.setText(user.getToken());
+
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -92,21 +101,25 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success
                             Log.d(mAuth.getCurrentUser().getUid(), "signInWithEmail:success");
-                            User user = rep.getUser(mAuth.getCurrentUser().getUid());
-                            Log.e("USER: ", user.toString());
-                            UserDetails.setCurrentUser(user);
+                            UserDetails.setMethod(LoginActivity.this::startMenuActivity);
+                            rep.getObject(rep.USERS_REF, mAuth.getCurrentUser().getUid());
+                            //rep.getCurrentUserDetails(mAuth.getCurrentUser().getUid());
+                            //Log.e("USER: ", user.toString());
+                            //UserDetails.setCurrentUser(user);
                             //Log.e("USER TOKEN: ", UserDetails.currentUser.getToken());
-                            Log.e("USER ACTIVE: ", UserDetails.currentUser.isActive() + "");
-                            Log.e("USER BALANCE: ", UserDetails.currentUser.getBalance() + "");
-                            UserDetails.currentUser.setEmail(email);
-                            Log.e("User bookings: ", UserDetails.currentUser.getBookings().toString());
-                            successLogin();
+                            //Log.e("USER ACTIVE: ", UserDetails.currentUser.isActive() + "");
+                            //Log.e("USER BALANCE: ", UserDetails.currentUser.getBalance() + "");
+                            //UserDetails.currentUser.setEmail(email);
+                            //Log.e("User bookings: ", UserDetails.currentUser.getBookings().toString());
+                            //UserDetails.currentUser.setEmail(mAuth.getCurrentUser().getEmail());
+                            UserDetails.setMethod(LoginActivity.this::successLogin);
+                            UserDetails.runConsumer();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-
+                            UserDetails.setMethod(LoginActivity.this::failedLogin);
                             failedLogin();
                         }
                     }
@@ -117,7 +130,8 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void startMenuActivity() {
+    private Object startMenuActivity() {
         startActivity(new Intent(LoginActivity.this, MenuActivity.class));
+        return null;
     }
 }

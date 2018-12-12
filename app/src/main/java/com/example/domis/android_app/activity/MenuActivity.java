@@ -31,8 +31,8 @@ public class MenuActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        userView = findViewById(R.id.userLogin);
-        userView.setText("User: " + UserDetails.currentUser.getEmail());
+       /* userView = findViewById(R.id.userLogin);
+        userView.setText("User: " + UserDetails.currentUser.getEmail());*/
 
         bookingsButton = findViewById(R.id.bookingButton);
         suppButton = findViewById(R.id.suppButton);

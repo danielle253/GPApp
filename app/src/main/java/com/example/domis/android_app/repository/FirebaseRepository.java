@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.Message;
 import com.example.domis.android_app.model.SupportTicket;
+import com.example.domis.android_app.model.TicketDetails;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
 import com.google.common.collect.ImmutableMap;
@@ -95,10 +96,7 @@ public class FirebaseRepository {
         return getObject(USERS_REF, userID);
     }
 
-    public SupportTicket getSupportTicket(String id)
-    {
-        return getObject(SUPPORT_TICKET_REF, id);
-    }
+    //public SupportTicket getSupportTicket(String id){ return getObject(SUPPORT_TICKET_REF, id); }
 
     public ArrayList<Booking> getUserBookings(String userID) {
         List<Booking> list = getObjectList("BOOKINGS", Booking.class);
@@ -169,6 +167,18 @@ public class FirebaseRepository {
 
     }
 
+    public void addUser(User user)
+    {
+        myRef.child(USERS_REF).push().setValue(user, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        Log.e("", databaseReference.toString());
+                    }
+                }
+        );
+        Log.e("Done", "Booking");
+    }
+
 
     public <T extends Entity> List<T> getObjectList(String reference, Class<T> c) {
         final Waiter waiter = new Waiter();
@@ -197,6 +207,33 @@ public class FirebaseRepository {
         return waiter.getList();
     }
 
+    public void getSupportTicket(String child) {
+        myRef.child(SUPPORT_TICKET_REF).child(child).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Log.e("", snapshot.child(SUPPORT_TICKET_REF).child(child).toString());
+                if(snapshot.getValue() != null) {
+                    SupportTicket obj = (SupportTicket) snapshot.getValue(CLASS_REF.get(SUPPORT_TICKET_REF));
+                    obj.setKey(snapshot.getKey());
+                    TicketDetails.setCurrentTicket(obj);
+                    snapshot.getChildren().forEach(i -> {
+                        TicketDetails.currentTicket.addMessage(i.getValue(Message.class));
+                    });
+                    //((T) waiter.getObject()).setKey(snapshot.getKey());
+                    //Log.e("Waiter: ", waiter.object.toString());
+                }
+                TicketDetails.runConsumer();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e("Failed To Get ", child);
+            }
+
+        });
+    }
+
     public <T extends Entity> T getObject(String reference, String child) {
         final Waiter waiter = new Waiter();
         myRef.child(reference).child(child).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -205,11 +242,13 @@ public class FirebaseRepository {
             public void onDataChange(DataSnapshot snapshot) {
                 Log.e("", snapshot.child(reference).child(child).toString());
                 if(snapshot.getValue() != null) {
-                    waiter.setObject(snapshot.getValue(CLASS_REF.get(reference)));
-                    ((T) waiter.getObject()).setKey(snapshot.getKey());
-                    Log.e("Waiter: ", waiter.object.toString());
+                    T obj = (T) snapshot.getValue(CLASS_REF.get(reference));
+                    obj.setKey(snapshot.getKey());
+                    //((T) waiter.getObject()).setKey(snapshot.getKey());
+                    //Log.e("Waiter: ", waiter.object.toString());
+                    UserDetails.setCurrentUser((User) obj);
                 }
-                waiter.respond();
+                UserDetails.runConsumer();
             }
 
             @Override

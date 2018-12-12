@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.authentication.LoginActivity;
 import com.example.domis.android_app.model.Booking;
+import com.example.domis.android_app.model.TicketDetails;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
@@ -69,21 +70,28 @@ public class SupportActivity extends AppCompatActivity {
             {
                 ticketIDs = UserDetails.currentUser.getSupportTickets();
                 List<String> tickets = new ArrayList<>();
-                for(String s : ticketIDs)
+                if(ticketIDs != null && !ticketIDs.isEmpty())
                 {
-                    tickets.add(rep.getSupportTicket(s).getTitle());
+                    for(String s : ticketIDs)
+                    {
+                        rep.getSupportTicket(s);
+                        tickets.add(TicketDetails.currentTicket.getTitle());
+                    }
+                    ArrayAdapter<String> messageArray = new ArrayAdapter<>(
+                        SupportActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        tickets );
+                    listView.setAdapter(messageArray);
+                    historyButton.setText("HIDE");
                 }
-                ArrayAdapter<String> messageArray = new ArrayAdapter<>(
-                    SupportActivity.this,
-                    android.R.layout.simple_list_item_1,
-                    tickets );
-                listView.setAdapter(messageArray);
-                historyButton.setText("HIDE");
             }
 
         });
 
-        listView.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(SupportActivity.this, SupportDetailsActivity.class).putExtra("id", ticketIDs.get(position))));
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            rep.getSupportTicket(ticketIDs.get(position));
+            startActivity(new Intent(SupportActivity.this, SupportDetailsActivity.class));
+        });
 
         sendButton.setOnClickListener(v -> {
             String message = ticketQuery.getText().toString();
