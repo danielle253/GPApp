@@ -44,6 +44,14 @@
             android:gravity="center"/>
 
         <Button
+            android:id="@+id/gameButton"
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/game"
+            android:gravity="center"
+            android:text="@string/game" />
+
+        <Button
             android:id="@+id/suppButton"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
