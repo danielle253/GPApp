@@ -32,6 +32,7 @@ public class SupportActivity extends AppCompatActivity {
     private TextView ticketLabel;
     private EditText ticketQuery;
     private FirebaseRepository rep;
+    private List<String> ticketIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class SupportActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    List<String> ticketIDs = UserDetails.currentUser.getSupportTickets();
+                    ticketIDs = UserDetails.currentUser.getSupportTickets();
                     List<String> tickets = new ArrayList<>();
                     for(String s : ticketIDs)
                     {
@@ -81,7 +82,7 @@ public class SupportActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                startActivity(new Intent(SupportActivity.this, SupportDetailsActivity.class).putExtra("id", ticketIDs.get(position)));
             }
         });
 
