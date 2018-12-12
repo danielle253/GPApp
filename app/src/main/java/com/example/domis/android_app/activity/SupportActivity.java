@@ -18,6 +18,8 @@ import com.example.domis.android_app.R;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
+import com.example.domis.android_app.repository.FirebaseRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +30,14 @@ public class SupportActivity extends AppCompatActivity {
     private ListView listView;
     private TextView ticketLabel;
     private EditText ticketQuery;
+    private FirebaseRepository rep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support);
+
+        rep = new FirebaseRepository();
 
         historyButton = findViewById(R.id.historyButton);
         listView = findViewById(R.id.listView);
@@ -48,6 +53,11 @@ public class SupportActivity extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = size.y / 2;
         listView.setLayoutParams(params);
+
+        ArrayAdapter<String> messageArray = new ArrayAdapter<String>(
+                SupportActivity.this,
+                android.R.layout.simple_list_item_1,
+                completedList );
 
 
 
