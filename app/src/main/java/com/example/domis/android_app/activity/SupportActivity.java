@@ -59,54 +59,43 @@ public class SupportActivity extends AppCompatActivity {
         params.height = size.y / 2;
         listView.setLayoutParams(params);
 
-        historyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(historyButton.getText().equals("HIDE"))
-                {
-                    listView.setAdapter(null);
-                    historyButton.setText("SHOW");
-                }
-                else
-                {
-                    ticketIDs = UserDetails.currentUser.getSupportTickets();
-                    List<String> tickets = new ArrayList<>();
-                    for(String s : ticketIDs)
-                    {
-                        tickets.add(rep.getSupportTicket(s).getTitle());
-                    }
-                    ArrayAdapter<String> messageArray = new ArrayAdapter<String>(
-                        SupportActivity.this,
-                        android.R.layout.simple_list_item_1,
-                        tickets );
-                    listView.setAdapter(messageArray);
-                    historyButton.setText("HIDE");
-                }
-
+        historyButton.setOnClickListener(v -> {
+            if(historyButton.getText().equals("HIDE"))
+            {
+                listView.setAdapter(null);
+                historyButton.setText("SHOW");
             }
+            else
+            {
+                ticketIDs = UserDetails.currentUser.getSupportTickets();
+                List<String> tickets = new ArrayList<>();
+                for(String s : ticketIDs)
+                {
+                    tickets.add(rep.getSupportTicket(s).getTitle());
+                }
+                ArrayAdapter<String> messageArray = new ArrayAdapter<>(
+                    SupportActivity.this,
+                    android.R.layout.simple_list_item_1,
+                    tickets );
+                listView.setAdapter(messageArray);
+                historyButton.setText("HIDE");
+            }
+
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(SupportActivity.this, SupportDetailsActivity.class).putExtra("id", ticketIDs.get(position)));
-            }
-        });
+        listView.setOnItemClickListener((parent, view, position, id) -> startActivity(new Intent(SupportActivity.this, SupportDetailsActivity.class).putExtra("id", ticketIDs.get(position))));
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = ticketQuery.getText().toString();
-                Log.e("Message: ", message);
-                if(message != null && !message.isEmpty())
-                {
-                    rep.createSupportTicket(message);
-                }
-                else
-                {
-                    Toast.makeText(SupportActivity.this, "Invalid message",
-                            Toast.LENGTH_LONG).show();
-                }
+        sendButton.setOnClickListener(v -> {
+            String message = ticketQuery.getText().toString();
+            Log.e("Message: ", message);
+            if(message != null && !message.isEmpty())
+            {
+                rep.createSupportTicket(message);
+            }
+            else
+            {
+                Toast.makeText(SupportActivity.this, "Invalid message",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
