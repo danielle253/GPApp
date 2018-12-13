@@ -42,12 +42,14 @@ public class BookingLogActivity extends AppCompatActivity {
         confirmedBookings = new ArrayList<>();
         for(String b : bookings)
         {
+            /*
             Object obj = rep.getBooking(b);
             Log.e("Booking ", obj.toString());
             if(obj instanceof ConfirmedBooking)
             {
                 confirmedBookings.add((ConfirmedBooking) obj);
             }
+            */
         }
         inprogressList = new ArrayList<>();
         completedList = new ArrayList<>();

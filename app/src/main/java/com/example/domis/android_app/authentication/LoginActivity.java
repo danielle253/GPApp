@@ -103,15 +103,6 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(mAuth.getCurrentUser().getUid(), "signInWithEmail:success");
                             UserDetails.setMethod(LoginActivity.this::startMenuActivity);
                             rep.getObject(rep.USERS_REF, mAuth.getCurrentUser().getUid());
-                            //rep.getCurrentUserDetails(mAuth.getCurrentUser().getUid());
-                            //Log.e("USER: ", user.toString());
-                            //UserDetails.setCurrentUser(user);
-                            //Log.e("USER TOKEN: ", UserDetails.currentUser.getToken());
-                            //Log.e("USER ACTIVE: ", UserDetails.currentUser.isActive() + "");
-                            //Log.e("USER BALANCE: ", UserDetails.currentUser.getBalance() + "");
-                            //UserDetails.currentUser.setEmail(email);
-                            //Log.e("User bookings: ", UserDetails.currentUser.getBookings().toString());
-                            //UserDetails.currentUser.setEmail(mAuth.getCurrentUser().getEmail());
                             UserDetails.setMethod(LoginActivity.this::successLogin);
                             UserDetails.runConsumer();
                         } else {

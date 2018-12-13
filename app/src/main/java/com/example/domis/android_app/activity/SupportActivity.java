@@ -25,6 +25,7 @@ import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.internal.ObjectConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,26 +62,23 @@ public class SupportActivity extends AppCompatActivity {
         listView.setLayoutParams(params);
 
         historyButton.setOnClickListener(v -> {
-            if(historyButton.getText().equals("HIDE"))
-            {
+            if (historyButton.getText().equals("HIDE")) {
                 listView.setAdapter(null);
                 historyButton.setText("SHOW");
-            }
-            else
-            {
-                ticketIDs = UserDetails.currentUser.getSupportTickets();
+            } else {
+                ticketIDs = UserDetails.currentUser.getTickets();
                 List<String> tickets = new ArrayList<>();
-                if(ticketIDs != null && !ticketIDs.isEmpty())
-                {
-                    for(String s : ticketIDs)
-                    {
+                if (ticketIDs != null && !ticketIDs.isEmpty()) {
+                    for (String s : ticketIDs) {
                         rep.getSupportTicket(s);
+                        TicketDetails.setMethod(this::method);
+                        TicketDetails.runConsumer();
                         tickets.add(TicketDetails.currentTicket.getTitle());
                     }
                     ArrayAdapter<String> messageArray = new ArrayAdapter<>(
-                        SupportActivity.this,
-                        android.R.layout.simple_list_item_1,
-                        tickets );
+                            SupportActivity.this,
+                            android.R.layout.simple_list_item_1,
+                            tickets);
                     listView.setAdapter(messageArray);
                     historyButton.setText("HIDE");
                 }
@@ -96,17 +94,18 @@ public class SupportActivity extends AppCompatActivity {
         sendButton.setOnClickListener(v -> {
             String message = ticketQuery.getText().toString();
             Log.e("Message: ", message);
-            if(message != null && !message.isEmpty())
-            {
+            if (message != null && !message.isEmpty()) {
                 rep.createSupportTicket(message);
-            }
-            else
-            {
+            } else {
                 Toast.makeText(SupportActivity.this, "Invalid message",
                         Toast.LENGTH_LONG).show();
             }
         });
 
 
+    }
+
+    private Object method() {
+        return null;
     }
 }

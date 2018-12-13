@@ -5,7 +5,7 @@ import java.util.List;
 public class User extends Entity {
 
     private List<String> bookings;
-    private List<String> supportTickets;
+    private List<String> tickets;
     private double balance;
     private String email;
     private boolean active;
@@ -59,11 +59,11 @@ public class User extends Entity {
         this.balance = balance;
     }
 
-    public List<String> getSupportTickets() {
-        return supportTickets;
+    public List<String> getTickets() {
+        return tickets;
     }
 
-    public void setSupportTickets(List<String> supportTickets) {
-        this.supportTickets = supportTickets;
+    public void setTickets(List<String> supportTickets) {
+        this.tickets = supportTickets;
     }
 }
