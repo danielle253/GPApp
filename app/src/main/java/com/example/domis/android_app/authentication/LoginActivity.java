@@ -27,6 +27,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
+import java.util.function.Consumer;
+
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -102,7 +104,19 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success
                             Log.d(mAuth.getCurrentUser().getUid(), "signInWithEmail:success");
                             UserDetails.setMethod(LoginActivity.this::startMenuActivity);
-                            rep.getObject(rep.USERS_REF, mAuth.getCurrentUser().getUid());
+
+
+                            rep.getObject(rep.USERS_REF, mAuth.getCurrentUser().getUid(), new Consumer<User>(){
+
+                                @Override
+                                public void accept(User user){
+                                    if(user.isActive())
+                                        successLogin();
+                                }
+                            });
+
+
+
                             UserDetails.setMethod(LoginActivity.this::successLogin);
                             UserDetails.runConsumer();
                         } else {

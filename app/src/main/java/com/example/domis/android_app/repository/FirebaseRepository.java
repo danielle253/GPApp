@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.example.domis.android_app.model.Entity;
@@ -276,7 +277,7 @@ public class FirebaseRepository {
         return (T) waiter.object;
     }
 
-    public <T extends Entity> T getObject(String reference, String child) {
+    public <T extends Entity> T getObject(String reference, String child, Consumer<T> consumer) {
         final Waiter waiter = new Waiter();
         myRef.child(reference).child(child).addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -286,24 +287,19 @@ public class FirebaseRepository {
                 if(snapshot.getValue() != null) {
                     T obj = (T) snapshot.getValue(CLASS_REF.get(reference));
                     obj.setKey(snapshot.getKey());
-                    //((T) waiter.getObject()).setKey(snapshot.getKey());
-                    //Log.e("Waiter: ", waiter.object.toString());
-                    UserDetails.setCurrentUser((User) obj);
+                    consumer.accept(obj);
                 }
-                UserDetails.runConsumer();
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 Log.e("Failed To Get ", child);
-                waiter.respond();
+
             }
 
         });
 
-        waiter.waitRespond();
 
-        return (T) waiter.object;
     }
 
     private class Waiter
