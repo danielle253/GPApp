@@ -181,7 +181,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         booking.setWheelchair(true);
-                                        rep.booking(booking);
+                                        //rep.booking(booking);
                                     }
                                 });
                         ad.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
@@ -189,7 +189,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         booking.setWheelchair(false);
-                                        rep.booking(booking);
+                                        //rep.booking(booking);
                                     }
                                 });
                         ad.setButton(DialogInterface.BUTTON_NEUTRAL, "Cancel",

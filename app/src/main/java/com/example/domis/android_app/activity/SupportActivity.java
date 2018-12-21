@@ -70,7 +70,7 @@ public class SupportActivity extends AppCompatActivity {
                 List<String> tickets = new ArrayList<>();
                 if (ticketIDs != null && !ticketIDs.isEmpty()) {
                     for (String s : ticketIDs) {
-                        rep.getSupportTicket(s);
+                        //rep.getSupportTicket(s);
                         TicketDetails.setMethod(this::method);
                         TicketDetails.runConsumer();
                         tickets.add(TicketDetails.currentTicket.getTitle());
@@ -87,7 +87,7 @@ public class SupportActivity extends AppCompatActivity {
         });
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            rep.getSupportTicket(ticketIDs.get(position));
+            //rep.getSupportTicket(ticketIDs.get(position));
             startActivity(new Intent(SupportActivity.this, SupportDetailsActivity.class));
         });
 
@@ -95,7 +95,7 @@ public class SupportActivity extends AppCompatActivity {
             String message = ticketQuery.getText().toString();
             Log.e("Message: ", message);
             if (message != null && !message.isEmpty()) {
-                rep.createSupportTicket(message);
+                //rep.createSupportTicket(message);
             } else {
                 Toast.makeText(SupportActivity.this, "Invalid message",
                         Toast.LENGTH_LONG).show();

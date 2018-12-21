@@ -21,11 +21,14 @@ import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.model.UserDetails;
 import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.function.Consumer;
 
@@ -68,7 +71,57 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    public Object successLogin() {
+    public void login(String email, String password) {
+        Log.d("", "signIn:" + email);
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success
+                            Log.d(mAuth.getCurrentUser().getUid(), "signInWithEmail:success");
+
+                            rep.getObject(rep.USERS_REF, mAuth.getCurrentUser().getUid(), new Consumer<User>(){
+                                @Override
+                                public void accept(User user){
+                                    if(user.isActive()) {
+                                        //Over here I am getting an Instance Token to be able to send notification using it later!!
+                                        Task<InstanceIdResult> task = FirebaseInstanceId.getInstance().getInstanceId();
+                                        task.addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onSuccess(InstanceIdResult authResult) {
+                                                user.setToken(authResult.getToken());
+                                                rep.set(FirebaseRepository.USERS_REF + "/" +
+                                                        mAuth.getCurrentUser().getUid(), user);
+                                            }
+                                        });
+
+                                        successLogin(user);
+                                    }
+                                }
+                            });
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            failedLogin();
+                        }
+                    }
+                });
+    }
+
+    public boolean validateForm() {
+        return true;
+    }
+
+    private Object startMenuActivity() {
+        startActivity(new Intent(LoginActivity.this, MenuActivity.class));
+        return null;
+    }
+
+    public Object successLogin(User user) {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
         ad.setMessage("Login Successful");
         ad.setButton(DialogInterface.BUTTON_POSITIVE, "Continue",
@@ -86,57 +139,6 @@ public class LoginActivity extends AppCompatActivity {
         ad.setButton(DialogInterface.BUTTON_POSITIVE, "Continue",
                 (dialog, which) -> ad.cancel());
         ad.show();
-        return null;
-    }
-
-
-    public void login(String email, String password) {
-        Log.d("", "signIn:" + email);
-        //User user = rep.getObject(FirebaseRepository.USERS_REF, "D1B6KN45KRahDUvF5IzZIQ3YSFx2");
-        //emailInput.setText(user.getToken());
-
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success
-                            Log.d(mAuth.getCurrentUser().getUid(), "signInWithEmail:success");
-                            UserDetails.setMethod(LoginActivity.this::startMenuActivity);
-
-
-                            rep.getObject(rep.USERS_REF, mAuth.getCurrentUser().getUid(), new Consumer<User>(){
-
-                                @Override
-                                public void accept(User user){
-                                    if(user.isActive())
-                                        successLogin();
-                                }
-                            });
-
-
-
-                            UserDetails.setMethod(LoginActivity.this::successLogin);
-                            UserDetails.runConsumer();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            UserDetails.setMethod(LoginActivity.this::failedLogin);
-                            failedLogin();
-                        }
-                    }
-                });
-    }
-
-    public boolean validateForm() {
-        return true;
-    }
-
-    private Object startMenuActivity() {
-        startActivity(new Intent(LoginActivity.this, MenuActivity.class));
         return null;
     }
 }

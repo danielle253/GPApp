@@ -79,7 +79,7 @@ public class BookingActivity extends AppCompatActivity {
             //Booking booking = new Booking(src, dest, FirebaseAuth.getInstance().getUid());
             if(!(booking.getSource() == null || booking.getDestination() == null))
             {
-                rep.booking(booking);
+                //rep.booking(booking);
             }
 
 
