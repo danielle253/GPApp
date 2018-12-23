@@ -55,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void sendEmailVerification() {
 
         // Send verification email
-        // [START send_email_verification]
         final FirebaseUser user = mAuth.getCurrentUser();
         user.sendEmailVerification()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -95,19 +94,18 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success
-                            Log.d("", "createUserWithEmail:success");
+                            Log.d("createUserWithEmail", "success");
                             Toast.makeText(RegisterActivity.this, "Authentication Succes.",
                                     Toast.LENGTH_SHORT).show();
-                            mAuth.getCurrentUser().getEmail();
-                            mAuth.getCurrentUser().getUid();
 
-                            User user = new User(new ArrayList<>(), 0);
+                            User user = new User(0);
                             user.setEmail(mAuth.getCurrentUser().getEmail());
-                            user.setToken(mAuth.getCurrentUser().getUid());
+                            user.setActive(true);
 
                             rep.add(FirebaseRepository.USERS_REF,
                                     mAuth.getCurrentUser().getUid(), user);
 
+                            sendEmailVerification();
                             successRegister();
                         } else {
                             // If sign in fails, display a message to the user.

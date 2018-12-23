@@ -16,7 +16,7 @@ public class UserDetails {
 
     public static void setCurrentUser(User user){
         if(user == null)
-            currentUser = new User(new ArrayList<String>(), 0.0);
+            currentUser = new User(0.0);
         else {
             if (user.getBookings() == null)
                 user.setBookings(new ArrayList<String>());

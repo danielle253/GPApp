@@ -1,5 +1,6 @@
 package com.example.domis.android_app.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User extends Entity {
@@ -11,12 +12,14 @@ public class User extends Entity {
     private boolean active;
     private String token;
 
-    private User() {}
+    private User()
+    {
+        tickets = new ArrayList<String>();
+        bookings = new ArrayList<String>();
+    }
 
-    public User(List<String> bookings, double balance) {
-        this.bookings = bookings;
+    public User(double balance) {
         this.balance = balance;
-
     }
 
     public String getEmail() {

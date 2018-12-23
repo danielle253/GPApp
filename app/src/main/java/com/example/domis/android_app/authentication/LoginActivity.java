@@ -79,13 +79,12 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success
-                            Log.d(mAuth.getCurrentUser().getUid(), "signInWithEmail:success");
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            rep.getObject(rep.USERS_REF, currentUser.getUid(), new Consumer<User>(){
 
-                            rep.getObject(rep.USERS_REF, mAuth.getCurrentUser().getUid(), new Consumer<User>(){
                                 @Override
                                 public void accept(User user){
-                                    if(user.isActive()) {
+                                    if(user.isActive() && currentUser.isEmailVerified()) {
                                         //Over here I am getting an Instance Token to be able to send notification using it later!!
                                         Task<InstanceIdResult> task = FirebaseInstanceId.getInstance().getInstanceId();
                                         task.addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
@@ -98,6 +97,12 @@ public class LoginActivity extends AppCompatActivity {
                                         });
 
                                         successLogin(user);
+
+                                        // Sign in success
+                                        Log.d(currentUser.getUid(), "signInWithEmail:success");
+
+                                    } else {
+                                        failedLogin();
                                     }
                                 }
                             });
