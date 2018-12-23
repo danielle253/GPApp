@@ -105,7 +105,6 @@ public class RegisterActivity extends AppCompatActivity {
                             rep.add(FirebaseRepository.USERS_REF,
                                     mAuth.getCurrentUser().getUid(), user);
 
-                            sendEmailVerification();
                             successRegister();
                         } else {
                             // If sign in fails, display a message to the user.
