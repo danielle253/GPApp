@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Welcome to TransportAI"
+            android:text="Welcome to TinGo"
             android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"/>

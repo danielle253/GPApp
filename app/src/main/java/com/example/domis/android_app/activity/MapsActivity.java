@@ -7,11 +7,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.authentication.LoginActivity;
+import com.example.domis.android_app.game.GameActivity;
+import com.example.domis.android_app.game.GameMainActivity;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.repository.FirebaseRepository;
 import com.google.android.gms.location.LocationServices;
@@ -75,6 +80,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseRepository rep;
 
     private Button bookButton;
+    private DrawerLayout mDrawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +89,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        if(menuItem.getTitle().equals("Map")){
+                            startActivity(new Intent(MapsActivity.this, MapsActivity.class));
+                        } else if(menuItem.getTitle().equals("Support")){
+                            startActivity(new Intent(MapsActivity.this, SupportActivity.class));
+                        } else if(menuItem.getTitle().equals("Booking")){
+                            startActivity(new Intent(MapsActivity.this, BookingLogActivity.class));
+                        } else if(menuItem.getTitle().equals("Easter Egg")){
+                            startActivity(new Intent(MapsActivity.this, GameMainActivity.class));
+                        } else if(menuItem.getTitle().equals("Log Out")){
+                            Log.e("Signing out", "");
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(MapsActivity.this, MainActivity.class));
+
+      //                      finish();
+                        }
+
+                        return true;
+                    }
+                });
 
         booking = new Booking();
         booking.setUserID(FirebaseAuth.getInstance().getUid());
@@ -217,9 +259,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    private void startMenuActivity() {
+    /*private void startMenuActivity() {
         startActivity(new Intent(this, MenuActivity.class));
-    }
+    }*/
 
     /**
      * Manipulates the map once available.
@@ -307,6 +349,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
+                            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()) , 14.0f) );
                             setSourceMarker(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), "Current Location");
                         } else {
                             Log.d("Er", "Current location is null. Using defaults.");

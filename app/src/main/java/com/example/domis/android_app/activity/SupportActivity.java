@@ -2,10 +2,13 @@ package com.example.domis.android_app.activity;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.domis.android_app.R;
 import com.example.domis.android_app.authentication.LoginActivity;
+import com.example.domis.android_app.game.GameActivity;
+import com.example.domis.android_app.game.GameMainActivity;
 import com.example.domis.android_app.model.Booking;
 import com.example.domis.android_app.model.TicketDetails;
 import com.example.domis.android_app.model.User;
@@ -39,6 +44,8 @@ public class SupportActivity extends AppCompatActivity {
     private Button sendButton;
     private FirebaseRepository rep;
     private List<String> ticketIDs;
+    private DrawerLayout mDrawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +108,41 @@ public class SupportActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        if(menuItem.getTitle().equals("Map")){
+                            startActivity(new Intent(SupportActivity.this, MapsActivity.class));
+                        } /*else if(menuItem.getTitle().equals("Support")){
+                            startActivity(new Intent(SupportActivity.this, SupportActivity.class));
+                        }*/ else if(menuItem.getTitle().equals("Booking")){
+                            startActivity(new Intent(SupportActivity.this, BookingLogActivity.class));
+                        } else if(menuItem.getTitle().equals("Easter Egg")){
+                            startActivity(new Intent(SupportActivity.this, GameMainActivity.class));
+                        } else if(menuItem.getTitle().equals("Log Out")){
+                            Log.e("Signing out", "");
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(SupportActivity.this, MainActivity.class));
+
+//                            finish();
+                        }
+
+                        return true;
+                    }
+                });
 
 
     }

@@ -1,9 +1,21 @@
 package com.example.domis.android_app.game;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
+import android.view.MenuItem;
+
+import com.example.domis.android_app.R;
+import com.example.domis.android_app.activity.BookingLogActivity;
+import com.example.domis.android_app.activity.MainActivity;
+import com.example.domis.android_app.activity.MapsActivity;
+import com.example.domis.android_app.activity.SupportActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -27,6 +39,8 @@ public class GameActivity extends AppCompatActivity {
 
         //adding it to contentview
         setContentView(gameView);
+
+
     }
 
     //pausing the game when activity is paused

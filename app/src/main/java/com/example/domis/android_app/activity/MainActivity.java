@@ -50,4 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private void startRegisterActivity() {
         startActivity(new Intent(MainActivity.this, RegisterActivity.class));
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }
