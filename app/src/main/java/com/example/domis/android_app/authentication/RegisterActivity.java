@@ -1,6 +1,7 @@
 package com.example.domis.android_app.authentication;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,8 +14,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.domis.android_app.R;
+import com.example.domis.android_app.activity.MapsActivity;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.repository.FirebaseRepository;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -35,7 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerButton;
 
     private FirebaseRepository rep;
-
+    private SignInButton mGoogleSignInButton;
+    private GoogleApiClient mGoogleApiClient;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +58,14 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.regButton);
 
         mAuth = FirebaseAuth.getInstance();
+
+        mGoogleSignInButton = (SignInButton)findViewById(R.id.google_sign_in_button);
+        mGoogleSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInWithGoogle();
+            }
+        });
     }
 
     private void sendEmailVerification() {
@@ -144,5 +160,44 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
         ad.show();
+    }
+
+    private static final int RC_SIGN_IN = 9001;
+
+    private void signInWithGoogle() {
+        if(mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        final Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+
+            if(result.isSuccess()) {
+                final GoogleApiClient client = mGoogleApiClient;
+                register(result.getSignInAccount().getEmail(), result.getSignInAccount().getId());
+                Intent myIn = new Intent(RegisterActivity.this, MapsActivity.class);
+                //successRegister();
+
+            } else {
+                failedRegister();
+
+            }
+        }
     }
 }

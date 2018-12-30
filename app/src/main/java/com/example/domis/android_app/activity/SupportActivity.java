@@ -45,6 +45,7 @@ public class SupportActivity extends AppCompatActivity {
     private FirebaseRepository rep;
     private List<String> ticketIDs;
     private DrawerLayout mDrawerLayout;
+    private ArrayAdapter messageArray;
 
 
     @Override
@@ -82,7 +83,7 @@ public class SupportActivity extends AppCompatActivity {
                         TicketDetails.runConsumer();
                         tickets.add(TicketDetails.currentTicket.getTitle());
                     }
-                    ArrayAdapter<String> messageArray = new ArrayAdapter<>(
+                    messageArray = new ArrayAdapter<>(
                             SupportActivity.this,
                             android.R.layout.simple_list_item_1,
                             tickets);
@@ -102,6 +103,8 @@ public class SupportActivity extends AppCompatActivity {
             String message = ticketQuery.getText().toString();
             Log.e("Message: ", message);
             if (message != null && !message.isEmpty()) {
+                messageArray.add(message);
+                //rep.set("SUPPORT");
                 //rep.createSupportTicket(message);
             } else {
                 Toast.makeText(SupportActivity.this, "Invalid message",

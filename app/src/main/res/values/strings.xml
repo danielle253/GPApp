@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android_App</string>
+    <string name="app_name">TinGo</string>
     <string name="title_activity_maps">Map</string>
     <string name="back"><![CDATA[< Back]]></string>
     <string name="booking">Booking</string>

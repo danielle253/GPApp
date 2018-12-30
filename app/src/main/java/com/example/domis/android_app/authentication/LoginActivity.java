@@ -17,6 +17,11 @@ import com.example.domis.android_app.R;
 import com.example.domis.android_app.activity.MapsActivity;
 import com.example.domis.android_app.model.User;
 import com.example.domis.android_app.repository.FirebaseRepository;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button loginButton;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         rep = new FirebaseRepository();
+
+
     }
 
     public void loginClick(View v){
@@ -142,4 +150,9 @@ public class LoginActivity extends AppCompatActivity {
         ad.show();
         return null;
     }
+
+
+
+
+
 }
