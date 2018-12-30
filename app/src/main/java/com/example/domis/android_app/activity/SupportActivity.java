@@ -46,6 +46,7 @@ public class SupportActivity extends AppCompatActivity {
     private List<String> ticketIDs;
     private DrawerLayout mDrawerLayout;
     private ArrayAdapter messageArray;
+    private List tickets;
 
 
     @Override
@@ -69,13 +70,17 @@ public class SupportActivity extends AppCompatActivity {
         params.height = size.y / 2;
         listView.setLayoutParams(params);
 
+        tickets = new ArrayList<String>();
+        messageArray = new ArrayAdapter<>(
+                SupportActivity.this,
+                android.R.layout.simple_list_item_1,
+                tickets);
         historyButton.setOnClickListener(v -> {
             if (historyButton.getText().equals("HIDE")) {
                 listView.setAdapter(null);
                 historyButton.setText("SHOW");
             } else {
                 ticketIDs = UserDetails.currentUser.getTickets();
-                List<String> tickets = new ArrayList<>();
                 if (ticketIDs != null && !ticketIDs.isEmpty()) {
                     for (String s : ticketIDs) {
                         //rep.getSupportTicket(s);
@@ -83,10 +88,7 @@ public class SupportActivity extends AppCompatActivity {
                         TicketDetails.runConsumer();
                         tickets.add(TicketDetails.currentTicket.getTitle());
                     }
-                    messageArray = new ArrayAdapter<>(
-                            SupportActivity.this,
-                            android.R.layout.simple_list_item_1,
-                            tickets);
+
                     listView.setAdapter(messageArray);
                     historyButton.setText("HIDE");
                 }
@@ -104,6 +106,11 @@ public class SupportActivity extends AppCompatActivity {
             Log.e("Message: ", message);
             if (message != null && !message.isEmpty()) {
                 messageArray.add(message);
+                tickets.add(message);
+                listView.refreshDrawableState();
+                ticketQuery.setText("");
+                Toast.makeText(getApplicationContext(), "Thank you for your query",
+                        Toast.LENGTH_LONG).show();
                 //rep.set("SUPPORT");
                 //rep.createSupportTicket(message);
             } else {
